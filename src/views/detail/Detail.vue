@@ -1,7 +1,6 @@
 <template>
   <div id="detail">
     <detail-nar-bar class="detail-nar" @titleClick="titleClick" ref="nav"></detail-nar-bar>
-    <div>{{$store.state.cartList.length}}</div>
     <scroller class="content"
               ref="scroll"
               @scroll="contentScroll"
@@ -100,13 +99,18 @@ export default {
     addCart() {
       //1.获取购物车需要的信息
       const product = {};
-      product.image = this.topImages[0];
+      product.images = this.topImages[0];
+      console.log(product.images)
       product.title = this.goods.title;
+      console.log(product.title)
       product.desc = this.goods.desc;
       product.price = this.goods.realPrice;
       product.iid = this.iid;
       //2.将商品添加到购物车vuex
-      this.$store.commit('addCart',product)
+      this.$store.dispatch('addCart', product).then(res => {
+        this.$mytoast.toastShow(res,2000)
+      })
+      //this.$store.commit('addCart',product)
     }
   },
   created() {
@@ -115,6 +119,7 @@ export default {
     //2.请求详情数据
     getDetail(this.iid).then(res => {
       const data = res.result;
+      //console.log(res.result)
       this.topImages = data.itemInfo.topImages;
       //2.1.获取商品信息
       this.goods = new Goods(data.itemInfo, data.columns, data.shopInfo.services)
