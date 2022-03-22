@@ -129,7 +129,6 @@ export default {
         this.goods[type].list.push(...res.data.list);
         this.goods[type].page += 1;
         this.$refs.scroll.finishPullUp();//刷新多次数据
-        console.log(res.data.list)
       })
     }
   }
